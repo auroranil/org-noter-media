@@ -1,0 +1,18 @@
+* org-noter-media
+ - Synchronise notes with video/audio files using mpv player
+ - Repository stems from this Github issue
+   - [[https://github.com/weirdNox/org-noter/issues/127][{Enhancement} Expand scope so that it can take notes from video and audio, bo...]]
+ - *Currently a work in progress*
+   - Not ready for use
+   - If you want to contribute, you are more than welcome to.
+* TODO Integration with mpv player 
+  - Planning to use JSON IPC 
+    - [[https://github.com/kljohann/mpv.el/wiki][Home · kljohann/mpv.el Wiki · GitHub]]
+    - [[https://github.com/rndusr/subed][GitHub - rndusr/subed: Subtitle editor for Emacs]] 
+* TODO Operations
+** Inserting [0/1]
+  - [ ] =org-noter-insert-note=
+** Synchronising [0/1]
+   - [ ] =org-noter-sync-current-note=
+** Media player specific [0/1]
+   - [ ] =org-noter-media-toggle-play=
