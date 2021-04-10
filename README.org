@@ -16,3 +16,19 @@
    - [ ] =org-noter-sync-current-note=
 ** Media player specific [0/1]
    - [ ] =org-noter-media-toggle-play=
+
+* TODO Plan
+  1. [ ] Creating new =org-noter= session with media file in =NOTER_DOCUMENT=
+         property should open =mpv= playing that media file from beginning
+  2. [ ] Specifying =NOTER_PAGE= property in root org heading should open
+         =mpv= playing that media file at that specified time
+  3. [ ] Communicate to =org-noter-media= its timestamp as video is playing,
+         so that it knows when to sync automatically
+  4. [ ] Specifying =NOTER_PAGE= property in non-root org heading should
+         show that heading and hide others (when =org-noter-hide-others= is
+         set to true) when playing video reaches that section
+  5. [ ] Implement =org-noter-sync-current-note=
+  6. [ ] Implement =org-noter-insert-note=
+  7. [ ] Implement =org-noter-media-toggle-play=
+  8. [ ] Find out a way to customise org-noter properties so that its
+         terminology aligns with media files
