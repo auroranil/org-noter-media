@@ -122,6 +122,8 @@
              (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) major-mode))
     (string-to-number (org-media-note--timestamp-to-seconds (org-media-note--get-current-timestamp)))))
 
+(add-to-list 'org-noter--get-precise-info-hook #'org-noter-media--get-precise-info)
+
 (defun org-noter-media--get-current-view (major-mode)
   (when (and (stringp major-mode)
              (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) major-mode))
