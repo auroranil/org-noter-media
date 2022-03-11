@@ -118,8 +118,8 @@
 (add-hook 'org-noter--doc-approx-location-hook #'org-noter-media-approx-location)
 
 (defun org-noter-media--get-precise-info (major-mode)
-  (when (and (stringp mode)
-             (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) mode))
+  (when (and (stringp major-mode)
+             (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) major-mode))
     (string-to-number (org-media-note--timestamp-to-seconds (org-media-note--get-current-timestamp)))))
 
 (defun org-noter-media--get-current-view (major-mode)
