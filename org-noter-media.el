@@ -141,12 +141,14 @@
 
 (add-to-list 'org-noter-set-up-document-handler #'org-noter-media-setup-handler)
 
-(defun org-noter-media--get-selected-text (mode)
+(defun org-noter-media--get-sub-text (mode)
   (when (and (stringp mode)
              (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) mode))
     (condition-case nil
         (mpv-get-property "sub-text")
       (error nil))))
+
+(add-to-list 'org-noter-get-selected-text-hook #'org-noter-media--get-sub-text)
 
 (defun org-noter-media-goto-location (mode location)
   (when (and (stringp mode)
