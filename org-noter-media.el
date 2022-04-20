@@ -1,4 +1,4 @@
-;edia.el --- Module for integrating org-media-note with org-noter  -*- lexical-binding: t; -*-
+;;; org-noter-media.el --- Module for integrating org-media-note with org-noter  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022  c1-g
 
