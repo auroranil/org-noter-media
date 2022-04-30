@@ -34,8 +34,6 @@
     "flv" "webm" "aif" "opus")
   "All file extensions that mpv can play.")
 
-(defvar-local org-noter-media-video-timer nil
-  "")
 (defun org-noter-media-check-doc (document-property)
   (when (stringp document-property)
     (cond ((and (string-match org-link-bracket-re document-property)
@@ -46,8 +44,6 @@
                (string-match-p "youtu\\.?be" document-property))
            document-property))))
 
-(defun org-noter-media-get-media-name ()
-  (mpv-get-property "path"))
 (add-to-list 'org-noter--check-location-property-hook 'org-noter-media-check-doc)
 
 (defun org-noter-media--parse-location (s)
