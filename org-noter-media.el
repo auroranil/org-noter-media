@@ -150,7 +150,7 @@
         (org-noter--doc-location-change-handler))))
     t))
 
-(add-to-list 'org-noter-set-up-document-handler #'org-noter-media-setup-handler)
+(add-to-list 'org-noter-set-up-document-hook #'org-noter-media-setup-handler)
 
 (defun org-noter-media--get-sub-text (mode)
   (when (org-noter-media-check-doc mode)
