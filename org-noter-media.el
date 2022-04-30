@@ -36,14 +36,22 @@
 
 (defvar-local org-noter-media-video-timer nil
   "")
+(defun org-noter-media-check-doc (document-property)
+  (when (stringp document-property)
+    (cond ((and (string-match org-link-bracket-re document-property)
+                (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite"))
+                                document-property))
+           (match-string 2 document-property))
+          ((or (string-match-p (concat (regexp-opt org-noter-media-extensions) "$") document-property)
+               (string-match-p "youtu\\.?be" document-property))
+           document-property))))
 
 (defun org-noter-media-get-media-name ()
   (mpv-get-property "path"))
+(add-to-list 'org-noter--check-location-property-hook 'org-noter-media-check-doc)
 
 (defun org-noter-media--parse-location (s)
-  (when (and (string-match org-link-bracket-re s)
-             (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite"))
-                             (org-element-property :type (org-noter-parse-link s))))
+  (when (org-noter-media-check-doc s)
     (let* ((s (match-string 1 s))
            (splitted (split-string s "#"))
            (file-path-or-url (nth 0 splitted))
@@ -70,9 +78,7 @@
 
 (defun org-noter-media--pretty-print-location (location)
   (org-noter--with-valid-session
-   (when (and (stringp (org-noter--session-doc-mode session))
-              (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite"))
-                              (org-noter--session-doc-mode session)))
+   (when (org-noter-media-check-doc (org-noter--session-property-text session)) 
      (let* ((file-path (mpv-get-property "path"))
             (link-type (if (org-media-note-ref-cite-p)
                            (concat (org-media-note--current-media-type)
@@ -111,29 +117,26 @@
 (add-to-list 'org-noter--pretty-print-location-hook #'org-noter-media--pretty-print-location)
 
 (defun org-noter-media-approx-location (mode &optional precise-info _force-new-ref)
-  (when (or (and (stringp mode)
-                 (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) mode)))
-    (string-to-number (org-media-note--timestamp-to-seconds (org-media-note--get-current-timestamp)))))
+  (org-noter--with-valid-session
+   (when (org-noter-media-check-doc (org-noter--session-property-text session))
+     (string-to-number (org-media-note--timestamp-to-seconds (org-media-note--get-current-timestamp))))))
 
 (add-hook 'org-noter--doc-approx-location-hook #'org-noter-media-approx-location)
 
 (defun org-noter-media--get-precise-info (major-mode)
-  (when (and (stringp major-mode)
-             (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) major-mode))
+  (when (org-noter-media-check-doc major-mode)
     (string-to-number (org-media-note--timestamp-to-seconds (org-media-note--get-current-timestamp)))))
 
 (add-to-list 'org-noter--get-precise-info-hook #'org-noter-media--get-precise-info)
 
 (defun org-noter-media--get-current-view (major-mode)
-  (when (and (stringp major-mode)
-             (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) major-mode))
+  (when (org-noter-media-check-doc major-mode)
     (vector 'timed (string-to-number (org-media-note--timestamp-to-seconds (org-media-note--get-current-timestamp))))))
 
 (add-to-list 'org-noter--get-current-view-hook #'org-noter-media--get-current-view)
 
 (defun org-noter-media-setup-handler (major-mode)
-  (when (and (stringp major-mode)
-             (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) major-mode))
+  (when (org-noter-media-check-doc major-mode)
     (run-with-idle-timer
      1 t
      (lambda ()
@@ -144,8 +147,7 @@
 (add-to-list 'org-noter-set-up-document-handler #'org-noter-media-setup-handler)
 
 (defun org-noter-media--get-sub-text (mode)
-  (when (and (stringp mode)
-             (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) mode))
+  (when (org-noter-media-check-doc mode)
     (condition-case nil
         (mpv-get-property "sub-text")
       (error nil))))
@@ -153,16 +155,8 @@
 (add-to-list 'org-noter-get-selected-text-hook #'org-noter-media--get-sub-text)
 
 (defun org-noter-media-goto-location (mode location)
-  (when (and (stringp mode)
-             (string-match-p (regexp-opt '("video" "audio" "videocite" "audiocite")) mode))
-    (let* ((splitted (split-string link "#"))
-           (file-path-or-url (nth 0 splitted))
-           (timestamps (split-string (nth 1 splitted)
-                                     "-"))
-           (time-a (org-media-note--timestamp-to-seconds (nth 0 timestamps)))
-           (time-b (if (= (length timestamps) 2)
-                       (org-media-note--timestamp-to-seconds (nth 1 timestamps)))))
-      (org-media-note--seek-position-in-current-media-file time-a time-b))))
+  (when (org-noter-media-check-doc mode)
+    (org-media-note--seek-position-in-current-media-file location)))
 
 (provide 'org-noter-media)
 ;;; org-noter-media.el ends here
