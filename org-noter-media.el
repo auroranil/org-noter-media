@@ -144,10 +144,8 @@
 (defun org-noter-media-setup-handler (major-mode)
   (when (org-noter-media-check-doc major-mode)
     (run-with-idle-timer
-     1 t
-     (lambda ()
-       (org-noter--with-valid-session
-        (org-noter--doc-location-change-handler))))
+     1 t (lambda () (org-noter--with-valid-session
+                     (org-noter--doc-location-change-handler))))
     t))
 
 (add-to-list 'org-noter-set-up-document-hook #'org-noter-media-setup-handler)
