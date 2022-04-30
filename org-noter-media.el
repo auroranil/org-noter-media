@@ -75,6 +75,13 @@
 
 (add-to-list 'org-noter--relative-position-to-view-hook #'org-noter-media--relative-position-to-view)
 
+(defun org-noter-media--convert-to-location-cons (location)
+  (if (and location (consp location))
+      location
+    (cons location 0)))
+
+(add-to-list 'org-noter--convert-to-location-cons-hook #'org-noter-media--convert-to-location-cons)
+
 (defun org-noter-media--pretty-print-location (location)
   (org-noter--with-valid-session
    (when (org-noter-media-check-doc (org-noter--session-property-text session)) 
