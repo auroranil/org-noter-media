@@ -164,5 +164,7 @@
   (when (org-noter-media-check-doc mode)
     (org-media-note--seek-position-in-current-media-file location)))
 
+(add-to-list 'org-noter--doc-goto-location-hook 'org-noter-media-goto-location)
+
 (provide 'org-noter-media)
 ;;; org-noter-media.el ends here
