@@ -46,6 +46,13 @@
 
 (add-to-list 'org-noter--check-location-property-hook 'org-noter-media-check-doc)
 
+(defun org-noter-media-open-document (doc-prop)
+  (when (org-noter-media-check-doc doc-prop)
+    (mpv-start (org-noter-media-check-doc doc-prop))
+    (current-buffer)))
+
+(add-to-list 'org-noter-open-document-functions #'org-noter-media-open-document)
+
 (defun org-noter-media--parse-location (s)
   (when (org-noter-media-check-doc s)
     (let* ((s (match-string 1 s))
