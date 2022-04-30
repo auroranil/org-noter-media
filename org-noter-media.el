@@ -58,12 +58,8 @@
     (let* ((s (match-string 1 s))
            (splitted (split-string s "#"))
            (file-path-or-url (nth 0 splitted))
-           (timestamps (split-string (nth 1 splitted)
-                                     "-"))
-           (time-a (org-timer-hms-to-secs (nth 0 timestamps)))
-           (time-b (if (= (length timestamps) 2)
-                       (org-timer-hms-to-secs (nth 1 timestamps)))))
-      time-a)))
+           (timestamps (split-string (nth 1 splitted) "-")))
+      (org-timer-hms-to-secs (nth 0 timestamps)))))
 
 (add-to-list 'org-noter--parse-location-property-hook #'org-noter-media--parse-location)
 
