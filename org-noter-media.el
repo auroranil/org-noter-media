@@ -48,7 +48,10 @@
 
 (defun org-noter-media-open-document (doc-prop)
   (when (org-noter-media-check-doc doc-prop)
-    (mpv-start (org-noter-media-check-doc doc-prop))
+    (mpv-start
+     (when (org-entry-get nil org-noter-property-note-location)
+       (concat "--start=" (number-to-string (org-noter--parse-location-property (org-entry-get nil org-noter-property-note-location)))))
+     (org-noter-media-check-doc doc-prop))
     (current-buffer)))
 
 (add-to-list 'org-noter-open-document-functions #'org-noter-media-open-document)
