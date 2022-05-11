@@ -84,7 +84,7 @@
 
 (defun org-noter-media--pretty-print-location (location)
   (org-noter--with-valid-session
-   (when (org-noter-media-check-doc (org-noter--session-property-text session)) 
+   (when (org-noter-media-check-doc (org-noter--session-property-text session))
      (let* ((file-path (mpv-get-property "path"))
             (link-type (if (org-media-note-ref-cite-p)
                            (concat (org-media-note--current-media-type)
@@ -92,7 +92,12 @@
                          (org-media-note--current-media-type)))
             (filename (mpv-get-property "media-title"))
             (duration (org-media-note--get-duration-timestamp))
-            (timestamp (org-timer-secs-to-hms location)))
+            (splitted-timestamp (split-string (number-to-string location) "\\(\\.\\|,\\)"))
+            (timestamp (org-timer-secs-to-hms (string-to-number (nth 0 splitted-timestamp))))
+            (fff (if (= (length splitted-timestamp) 2)
+                     (format ".%s" (nth 1 splitted-timestamp))
+                   "")))
+
        (if (org-media-note--ab-loop-p)
            ;; ab-loop link
            (let ((time-a (org-media-note--seconds-to-timestamp (mpv-get-property "ab-loop-a")))
@@ -109,10 +114,11 @@
                                                        ("ab-loop-b" . ,time-b)
                                                        ("file-path" . ,file-path)))))
          ;; timestamp link
-         (format "[[%s:%s#%s][%s]]"
+         (format "[[%s:%s#%s%s][%s]]"
                  link-type
                  (org-media-note--link-base-file file-path)
                  timestamp
+                 fff
                  (org-media-note--link-formatter org-media-note-timestamp-link-format
                                                  `(("filename" . ,filename)
                                                    ("duration" . ,duration)
