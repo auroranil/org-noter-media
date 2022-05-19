@@ -89,7 +89,7 @@
 (defun org-noter-media--pretty-print-location (location)
   (org-noter--with-valid-session
    (when (org-noter-media-check-doc (org-noter--session-property-text session))
-     (let* ((file-path (mpv-get-property "path"))
+     (let* ((file-path (org-noter--session-property-text session))
             (link-type (if (org-media-note-ref-cite-p)
                            (concat (org-media-note--current-media-type)
                                    "cite")
@@ -219,6 +219,17 @@
        output-data))))
 
 (add-to-list 'org-noter-create-skeleton-functions #'org-noter-media-create-skeleton)
+
+(defun org-noter-media--mpv-property-ad (property)
+  (org-noter--with-valid-session
+   (save-excursion
+     (pcase property
+       ("path" (org-noter--session-property-text session))
+       ("media-title" (progn (while (org-up-heading-safe))
+                             (or (org-entry-get nil "title")
+                                 (nth 4 (org-heading-components)))))))))
+
+(advice-add 'mpv-get-property :before-until #'org-noter-media--mpv-property-ad)
 
 (provide 'org-noter-media)
 ;;; org-noter-media.el ends here
