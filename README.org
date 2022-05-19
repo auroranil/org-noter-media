@@ -1,34 +1,79 @@
 * org-noter-media
- - Synchronise notes with video/audio files using mpv player
- - Repository stems from this Github issue
-   - [[https://github.com/weirdNox/org-noter/issues/127][{Enhancement} Expand scope so that it can take notes from video and audio, bo...]]
- - *Currently a work in progress*
-   - Not ready for use
-   - If you want to contribute, you are more than welcome to.
-* TODO Integration with mpv player 
-  - Planning to use JSON IPC 
-    - [[https://github.com/kljohann/mpv.el/wiki][Home · kljohann/mpv.el Wiki · GitHub]]
-    - [[https://github.com/rndusr/subed][GitHub - rndusr/subed: Subtitle editor for Emacs]] 
-* TODO Operations
-** Inserting [0/1]
-  - [ ] =org-noter-insert-note=
-** Synchronising [0/1]
-   - [ ] =org-noter-sync-current-note=
-** Media player specific [0/1]
-   - [ ] =org-noter-media-toggle-play=
+- Synchronise notes with video/audio files using mpv player
+- Repository stems from this Github issue
+  - [[https://github.com/weirdNox/org-noter/issues/127][{Enhancement} Expand scope so that it can take notes from video and audio, bo...]]
+- *Currently a work in progress*
+  - +Not ready for use+
+  - If you want to contribute, you are more than welcome to.
+* Caveat & Installation
+** Incompatible with upstream org-noter
+The way org-noter originally works is that it will call ~find-file~ on the value of =NOTER_DOCUMENT=, resulting
+in a new buffer then, get the ~major-mode~ of this new buffer to call the appropriate functions for the mode.
 
-* TODO Plan
-  1. [ ] Creating new =org-noter= session with media file in =NOTER_DOCUMENT=
-         property should open =mpv= playing that media file from beginning
-  2. [ ] Specifying =NOTER_PAGE= property in root org heading should open
-         =mpv= playing that media file at that specified time
-  3. [ ] Communicate to =org-noter-media= its timestamp as video is playing,
-         so that it knows when to sync automatically
-  4. [ ] Specifying =NOTER_PAGE= property in non-root org heading should
-         show that heading and hide others (when =org-noter-hide-others= is
-         set to true) when playing video reaches that section
-  5. [ ] Implement =org-noter-sync-current-note=
-  6. [ ] Implement =org-noter-insert-note=
-  7. [ ] Implement =org-noter-media-toggle-play=
-  8. [ ] Find out a way to customise org-noter properties so that its
-         terminology aligns with media files
+For example, if your =NOTER_DOCUMENT= is a path to a pdf file, org-noter will call ~find-file~ resulting in a new buffer
+with in the ~major-mode~ called ~pdf-view-mode~. Org-noter then passes the ~pdf-view-mode~ to various function to handle the mode as expected.
+
+This breaks down, however, when our =NOTER_DOCUMENT= is a binary file (mp3, mp4, etc.) that Emacs has no mode to handle yet.
+
+If only we can customize the way org-noter find its =NOTER_DOCUMENT= and try to remove ~major-mode~ for the equation.
+
+** Link-as-doc
+This modified version of org-noter can handle =[[links]]= as its source document.
+
+See https://github.com/c1-g/org-noter-plus-djvu/tree/link-as-doc.
+
+To install it, with [[https://github.com/radian-software/straight.el.git][straight.el]] and [[https://github.com/jwiegley/use-package][use-package]],
+
+#+begin_src emacs-lisp
+  (use-package org-noter
+    :straight '(org-noter :type git
+                          :host nil
+                          :repo "https://github.com/c1-g/org-noter-plus-djvu.git"
+                          :branch "link-as-doc"
+                          :files ("other/*.el" "*.el" "modules/*.el"))
+    :config
+    (use-package org-noter-nov :ensure nil)
+    (use-package org-noter-djvu :ensure nil)
+    (use-package org-noter-pdf :ensure nil))
+#+end_src
+and then to install this package,
+
+#+begin_src emacs-lisp
+  (use-package org-noter-media
+    :straight '(org-noter-media :type git
+                                :host github
+                                :repo "auroranil/org-noter-media"))
+#+end_src
+
+* DONE Integration with mpv player 
+- Planning to use JSON IPC 
+  - [[https://github.com/kljohann/mpv.el/wiki][Home · kljohann/mpv.el Wiki · GitHub]]
+  - [[https://github.com/rndusr/subed][GitHub - rndusr/subed: Subtitle editor for Emacs]] 
+* DONE Operations
+** Inserting [1/1]
+- [X] =org-noter-insert-note=
+** Synchronising [1/1]
+- [X] =org-noter-sync-current-note=
+** Media player specific [0/1]
+- [-] =org-noter-media-toggle-play=
+
+* DONE Plan
+1. [X] Creating new =org-noter= session with media file in =NOTER_DOCUMENT=
+   property should open =mpv= playing that media file from beginning
+2. [X] Specifying =NOTER_PAGE= property in root org heading should open
+   =mpv= playing that media file at that specified time
+3. [X] Communicate to =org-noter-media= its timestamp as video is playing,
+   so that it knows when to sync automatically
+4. [X] Specifying =NOTER_PAGE= property in non-root org heading should
+   show that heading and hide others (when =org-noter-hide-others= is
+   set to true) when playing video reaches that section
+5. [X] Implement =org-noter-sync-current-note=
+6. [X] Implement =org-noter-insert-note=
+7. [-] Implement =org-noter-media-toggle-play=
+   This feature is already available in ~org-media-note~. Try ~M-x org-media-note-hydra/body <SPC>~
+8. [-] Find out a way to customise org-noter properties so that its
+   terminology aligns with media files
+
+   For me, the default =NOTER_DOCUMENT= is already satisfactory. I tend to think of "document" in a more abstract sense, that is, an object that gives information; so it is not only a paper but it can be a video, audio, speech, etc.
+
+   But for a more neutral term, maybe =NOTER_SOURCE=?
