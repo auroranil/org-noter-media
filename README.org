@@ -29,8 +29,9 @@ put these in your config file.
 #+begin_src emacs-lisp
   (use-package org-noter
     :straight '(org-noter :type git
-                          :host nil
-                          :repo "https://github.com/c1-g/org-noter-plus-djvu.git"
+                          :host github
+                          :repo "weirdNox/org-noter"
+                          :fork "c1-g/org-noter-plus-djvu"
                           :branch "link-as-doc"
                           :files ("other/*.el" "*.el" "modules/*.el"))
     :config
