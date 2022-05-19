@@ -44,7 +44,8 @@ and then to install this package,
   (use-package org-noter-media
     :straight '(org-noter-media :type git
                                 :host github
-                                :repo "auroranil/org-noter-media"))
+                                :repo "auroranil/org-noter-media"
+                                :fork "c1-g/org-noter-media"))
 #+end_src
 
 * DONE Integration with mpv player 
