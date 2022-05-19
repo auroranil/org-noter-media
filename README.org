@@ -74,7 +74,7 @@ and then to install this package,
 6. [X] Implement =org-noter-insert-note=
 7. [-] Implement =org-noter-media-toggle-play=
    
-   This feature is already available in ~org-media-note~. Try ~M-x org-media-note-hydra/body <SPC>~
+   This feature is already available in ~mpv.el~. Try ~M-x mpv-pause~
 8. [-] Find out a way to customise org-noter properties so that its
    terminology aligns with media files
 
