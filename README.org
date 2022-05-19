@@ -24,6 +24,8 @@ See https://github.com/c1-g/org-noter-plus-djvu/tree/link-as-doc.
 
 To install it, with [[https://github.com/radian-software/straight.el.git][straight.el]] and [[https://github.com/jwiegley/use-package][use-package]],
 
+put these in your config file.
+
 #+begin_src emacs-lisp
   (use-package org-noter
     :straight '(org-noter :type git
