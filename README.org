@@ -2,9 +2,10 @@
 - Synchronise notes with video/audio files using mpv player
 - Repository stems from this Github issue
   - [[https://github.com/weirdNox/org-noter/issues/127][{Enhancement} Expand scope so that it can take notes from video and audio, bo...]]
-- *Currently a work in progress*
-  - +Not ready for use+
-  - If you want to contribute, you are more than welcome to.
+* Contributors
+- [[https://github.com/auroranil][auroranil]] - Designer
+- [[https://github.com/c1-g][c1-g]] - Implementer
+
 * Caveat & Installation
 ** Incompatible with upstream org-noter
 The way org-noter originally works is that it will call ~find-file~ on the value of =NOTER_DOCUMENT=, resulting
